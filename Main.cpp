@@ -2,25 +2,38 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<stb/stb_image.h>
+#include<glm/glm.hpp>
+#include<glm/gtc/matrix_transform.hpp>
+#include<glm/gtc/type_ptr.hpp>
 
 #include"Texture.h"
 #include"shaderClass.h"
 #include"VAO.h"
 #include"VBO.h"
 #include"EBO.h"
+#include"Camera.h"
+
+const unsigned int width = 800;
+const unsigned int height = 800;
+int a = 0;
 
 GLfloat vertices[] = {
-	//     CORDENADAS                                /      C0RES           /       TEXTURAS    //                                     
-		-0.5f,  -0.5f, 0.0f,							1.0f, 0.0f,  0.0f,		0.0f,  0.0f,
-		-0.5f,   0.5f, 0.0f,							0.0f, 1.0f,  0.0f,		0.0f,  1.0f,
-		 0.5f,   0.5f, 0.0f,							0.0f, 0.0f,  1.0f,		1.0f,  1.0f,
-		 0.5f,  -0.5f, 0.0f,							1.0f, 1.0f,  1.0f,		1.0f,  0.0f
+	//     CORDENADAS                    /      C0RES           /       TEXTURAS    //                                     
+		-0.5f,  -0.0f,  0.5f,				1.0f, 0.0f,  0.0f,		0.0f,  0.0f,
+		-0.5f,   0.0f, -0.5f,				0.0f, 1.0f,  0.0f,		5.0f,  0.0f,
+		 0.5f,   0.0f, -0.5f,				0.0f, 0.0f,  1.0f,		0.0f,  0.0f,
+		 0.5f,   0.0f,  0.5f,				1.0f, 1.0f,  1.0f,		5.0f,  0.0f,
+		 0.0f,   0.8f,  0.0f,				1.0f, 0.13f, 0.4f,      2.5f,  5.0f              
 };
 
 // Indices dos vertices para ordem
 GLuint indices[] = {
-	0, 2, 1,
-	0, 3, 2,
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
 };
 
 //Função principal
@@ -34,7 +47,7 @@ int main() {
 
 	
 	//Cria a janela e retorna um erro se falhar
-	GLFWwindow* window = glfwCreateWindow(800, 800, "Teste", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "Teste", NULL, NULL);
 		if (window == NULL) {
 			std::cout << "Falha na janela" << std::endl;
 			return -1;
@@ -45,7 +58,7 @@ int main() {
 	gladLoadGL();
 
 	//Área onde é renderizado
-	glViewport(0, 0, 800, 800);
+	glViewport(0, 0, width, height);
 	//Faz o programa ler os arquvios shader
 	Shader shaderProgram("default.vert", "default.frag");
 
@@ -55,7 +68,7 @@ int main() {
 
 	//Cria um Buffer para o vertex array e relaciona ele as vertices
 	VBO VBO1(vertices, sizeof(vertices));
-	//Cria um Buffer para os elementos e relaciona ele as vertices
+	//Cria um Buffer para os elementos e relaciona ele aos indeces
 	EBO EBO1(indices, sizeof(indices));
 
 	//Relaciona  atributos como cor e coordenadas ao VAO
@@ -67,22 +80,32 @@ int main() {
 	VBO1.Unbind();
 	EBO1.Unbind();
 
-	//Gera um atributo de um uniforme de escala
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+	
 
 	//Pega uma textura de um png 
 	Texture ops("Sem Título.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	ops.texUnit(shaderProgram, "tex0", 0);
 
+	// Faz com que faces não fiquem sobrepondo
+	glEnable(GL_DEPTH_TEST);
+
+	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+
 	//Loop while para atualizar a janela
 	while (!glfwWindowShouldClose(window)) {
+		//Cor do fundo
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		//Apaga os buffers e atribui uma nova buffer de cor ou de profundidade
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Ativa o programa de shader
 		shaderProgram.Activate();
-		glUniform1f(uniID, 0.5f);
+
+		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+
+
 		ops.Bind();
 		VAO1.Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();

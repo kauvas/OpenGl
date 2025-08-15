@@ -10,12 +10,12 @@ layout (location = 2) in vec2 aTex;
 out vec3 color;
 //Saida das coordenadas texturas para Default.frag
 out vec2 texCoord;
-//Controla a escala
-uniform float scale;
+
+uniform mat4 camMatrix;
 
 void main(){
    //Gera as coordenadas do vetices
-   gl_Position = vec4(aPos.x + aPos.x * scale, aPos.y + aPos.y * scale, aPos.z + aPos.z * scale, 1.0);
+   gl_Position = camMatrix * vec4(aPos, 1.0);
    //Atribui os dados das cores 
    color = aColor;
    //Atribui os dados de coordnadas para texturas
