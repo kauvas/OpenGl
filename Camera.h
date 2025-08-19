@@ -12,21 +12,29 @@
 
 #include"shaderClass.h"
 
+
 class Camera {
 public:
+	//Vetores da câmera
 	glm::vec3 Position;
 	glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
-
+	glm::mat4 cameraMatrix = glm::mat4(1.0f);
+	//Previne a câmera de pular de posições
 	bool firstClick = true;
+	//largura e altura da janela
 	int width;
 	int height;
+	//Controla a velocidade e sensibilidade da câmera
 	float speed = 0.1f;
 	float sensitivity = 100.0f;
-
+	//Construtor da camera
 	Camera(int width, int height, glm::vec3 position);
-
-	void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+	//Atualiza a matriz da camera para o Vertex Shader
+	void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+	//Exporta a matriz da câmera para o shader
+	void Matrix(Shader& shader, const char* uniform);
+	//Adiciona controles
 	void Inputs(GLFWwindow* window);
 };
 #endif
