@@ -45,6 +45,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Default.vert">
@@ -53,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Default.frag">
+      <Filter>Arquivos de Recurso\Shaders</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>Arquivos de Recurso\Shaders</Filter>
+    </None>
+    <None Include="light.vert">
       <Filter>Arquivos de Recurso\Shaders</Filter>
     </None>
   </ItemGroup>
@@ -70,6 +79,9 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>
