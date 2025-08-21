@@ -137,6 +137,8 @@
     <ClCompile Include="EBO.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="shaderClass.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -152,8 +154,10 @@
     <None Include="light.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="shaderClass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VAO.h" />
@@ -163,6 +167,11 @@
     <Image Include="..\..\..\Downloads\pop_cat.png" />
     <Image Include="..\..\..\OneDrive\Desktop\ops.png" />
     <Image Include="..\..\..\OneDrive\Desktop\Sem título.png" />
+    <Image Include="..\..\..\OneDrive\Imagens\NOVOSPEC.png" />
+    <Image Include="..\..\..\OneDrive\Imagens\NOVOSPEC2.jpeg" />
+    <Image Include="NOVO1.png" />
+    <Image Include="planks.png" />
+    <Image Include="planksSpec.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

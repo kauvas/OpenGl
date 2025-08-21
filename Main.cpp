@@ -1,66 +1,34 @@
-#include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include<stb/stb_image.h>
-#include<glm/glm.hpp>
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
+#include "Mesh.h"
 
-#include"Texture.h"
-#include"shaderClass.h"
-#include"VAO.h"
-#include"VBO.h"
-#include"EBO.h"
-#include"Camera.h"
-
-const unsigned int width = 1920;
-const unsigned int height = 1080;
+const unsigned int width = 800;
+const unsigned int height = 800;
 int a = 0;
 
-GLfloat vertices[] = {
-	//     COORDENADAS   /      C0RES             /   TEXTURAS     /      NORMAIS        //                                     
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Lado inferior
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Lado inferior
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Lado inferior
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Lado inferior
-
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Lado esquerdo
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Lado esquerdo
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Lado esquerdo
-
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Lado interior
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Lado interior
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Lado interior
-
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Lado direito
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Lado direito
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Lado direito
-
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Lado frontal
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Lado frontal
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Lado frontal            
+Vertex vertices[] = {
+	//     COORDENADAS                    /      C0RES                 /   TEXTURAS                /      NORMAIS        //                                     
+	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, -1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f,  1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
 };
+
 
 // Indices dos vertices para ordem
 GLuint indices[] = {
-	0, 1, 2, // Bottom side
-	0, 2, 3, // Bottom side
-	4, 6, 5, // Left side
-	7, 9, 8, // Non-facing side
-	10, 12, 11, // Right side
-	13, 15, 14 // Facing side
+	0, 1, 2,
+	0, 2, 3
 };
 
-GLfloat lightVertices[] = {
+Vertex lightVertices[] = {
 //     COORDENADAS     //
-   -0.1f, -0.1f,  0.1f,
-   -0.1f, -0.1f, -0.1f,
-	0.1f, -0.1f, -0.1f,
-	0.1f, -0.1f,  0.1f,
-   -0.1f,  0.1f,  0.1f,
-   -0.1f,  0.1f, -0.1f,
-	0.1f,  0.1f, -0.1f,
-	0.1f,  0.1f,  0.1f
+    Vertex{glm::vec3(-0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f,  0.1f)}
 };
 
 GLuint lightIndices[] = {
@@ -96,41 +64,33 @@ int main() {
 	glfwMakeContextCurrent(window);
 	//Ativa Glad
 	gladLoadGL();
+
 	//Área onde é renderizado
 	glViewport(0, 0, width, height);
+
+	//Dados da textura
+	Texture textures[]{
+		//Pega uma textura de um png 
+		Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+		Texture("planksSpec.png", "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
+	};
+
 	//Faz o programa ler os arquvios shader
 	Shader shaderProgram("default.vert", "default.frag");
-	//Cria um objeto de vertex array e executa um bIND
-	VAO VAO1;
-	VAO1.Bind();
-	//Cria um Buffer para o vertex array e relaciona ele as vertices
-	VBO VBO1(vertices, sizeof(vertices));
-	//Cria um Buffer para os elementos e relaciona ele aos indeces
-	EBO EBO1(indices, sizeof(indices));
-	//Relaciona  atributos como cor e coordenadas ao VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
-	//Unbind nos objetos para previnir erros
-	VAO1.Unbind();
-	VBO1.Unbind();
-	EBO1.Unbind();
+	//Guarda dados da mesh em vetores
+	std::vector <Vertex> verts(vertices, vertices + sizeof(vertices) / sizeof(Vertex));
+	std::vector <GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
+	std::vector <Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
+	//Mesh do chão
+	Mesh floor(verts, ind, tex);
+
 	//Shader para a luz
 	Shader lightShader("light.vert", "light.frag");
-	//Cria um Vertex Array Object e da bind
-	VAO lightVAO;
-	lightVAO.Bind();
-	//Cria um Vertex Buffer Object e atribui as vertices
-	VBO lightVBO(lightVertices, sizeof(lightVertices));
-	//Cria um Element Buffer Object e atribui aos indices
- 	EBO lightEBO(lightIndices, sizeof(lightIndices));
-	//Relaciona atributos do VBO (coordenadas, cores) para o VAO
-	lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-	//Unbind para os objetos
-	lightVAO.Unbind();
-	lightVBO.Unbind();
-	lightEBO.Unbind();
+	//Guarda os dados da mesh em vetores
+	std::vector <Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
+	std::vector <GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
+	//Mesh da luz
+	Mesh light(lightVerts, lightInd, tex);
 
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -150,9 +110,7 @@ int main() {
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
 
-	//Pega uma textura de um png 
-	Texture ops("Sem Título.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	ops.texUnit(shaderProgram, "tex0", 0);
+	
 
 	// Faz com que faces não fiquem sobrepondo
 	glEnable(GL_DEPTH_TEST);
@@ -170,26 +128,10 @@ int main() {
 		camera.Inputs(window);
 		//Atualiza e manda a matriz da camera para o Vertex Shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
-		//Ativa o programa de shader
-		shaderProgram.Activate();
-		//Exporta a posição da camera para Default.frag para iluminação especular
-		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-		//Exporta o camMatrix para Default.vert da pirâmide
-		camera.Matrix(shaderProgram, "camMatrix");
-		//Bind na textura para ela aparecer
-		ops.Bind();
-		//Bind do VAO para o OpenGL
-		VAO1.Bind();
-		//Desenha primitivos(Formas), numero de indice, seu tipo e indexação
-		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
-		//Ativa o programa de iluminação
-		lightShader.Activate();
-		//Exporta camMatrix para light.vert
-		camera.Matrix(lightShader, "camMatrix");
-		//Bind do VAO para o OpenGL
-		lightVAO.Bind();
-		//Desenha primitivos(Formas), numero de indice, seu tipo e indexação
-		glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		//Desenha as meshes
+		floor.Draw(shaderProgram, camera);
+		light.Draw(lightShader, camera);
+
 		//Muda o buffer anterior com o posterior
 		glfwSwapBuffers(window);
 		//Processa os eventos
@@ -197,14 +139,8 @@ int main() {
 	}
 
 	//Deleta todos objetos criados
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
-	ops.Delete();
+
 	shaderProgram.Delete();
-	lightVAO.Delete();
-	lightVBO.Delete();
-	lightEBO.Delete();
 	lightShader.Delete();
 	//Deleta a janela
 	glfwDestroyWindow(window);
