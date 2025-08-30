@@ -22,16 +22,19 @@ out vec2 texCoord;
 //Recebe a matriz da camera
 uniform mat4 camMatrix;
 uniform mat4 model;
+uniform mat4 translation;
+uniform mat4 rotation;
+uniform mat4 scale;
 
 void main(){
 	//Calcula a posição atual
-	crntPos = vec3(model * vec4(aPos,1.0f));
+	crntPos = vec3(model * translation * -rotation * scale * vec4(aPos, 1.0f));
     //Atribui os daods da normal
 	Normal = aNormal;
     //Atribui os dados das cores 
     color = aColor;
     //Atribui os dados de coordnadas para texturas
-    texCoord = aTex;
+    texCoord = mat2(0.0, -1.0, 1.0, 0.0) * aTex;
 
     //Gera as coordenadas do vertices
     gl_Position = camMatrix * vec4(aPos, 1.0);
