@@ -13,8 +13,8 @@
 #include"EBO.h"
 #include"Camera.h"
 
-const unsigned int width = 1920;
-const unsigned int height = 1080;
+const unsigned int width = 800;
+const unsigned int height = 800;
 int a = 0;
 
 GLfloat vertices[] = {
